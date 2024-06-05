@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Ky</title>
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .page {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    .yesButton,
+    .noButton {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="pagesContainer"></div>
+
+  <script>
+    const pagesContent = [
+      "hi honey &lt;3",
+      "I just wanted to say..",
+      "I am grateful for our moments together.",
+      "I like how you can only eat yogurt in tiny bites,",
+      "how you can eat dry ass crackers like nothing,",
+      "how you let me believe that I'm the funny one,",
+      "how you can chug a pint of orange juice,",
+      "but most of all",
+      "how smart, kind, caring, and XXX you are",
+      "Will you be mine?"
+    ];
+
+    function createPage(content, pageNumber) {
+      const page = document.createElement('div');
+      page.id = `page${pageNumber}`;
+      page.className = 'page';
+      if (pageNumber === 1) {
+        page.classList.add('active');
+      }
+      page.innerHTML = `
+        <h1>${content}</h1>
+        <div class="buttons">
+          <button class="nextButton">Next</button>
+        </div>
+      `;
+      if (pageNumber === pagesContent.length) {
+        page.querySelector('.buttons').innerHTML = `
+      <button class="yesButton">Yes</button>
+      <button class="noButton movable">No</button>
+  `;
+
+
+      }
+      return page;
+    }
+
+    const pagesContainer = document.getElementById('pagesContainer');
+    for (let i = 0; i < pagesContent.length; i++) {
+      const page = createPage(pagesContent[i], i + 1);
+      pagesContainer.appendChild(page);
+    }
+
+    const totalPages = pagesContent.length;
+    let currentPage = 1;
+
+    document.querySelectorAll('.nextButton').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById(`page${currentPage}`).classList.remove('active');
+        currentPage = (currentPage % totalPages) + 1;
+        document.getElementById(`page${currentPage}`).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.yesButton').forEach(button => {
+      button.addEventListener('click', () => {
+        alert('YAY lets get fro-yo and play PlateUp!');
+      });
+    });
+
+    document.querySelectorAll('.noButton').forEach(button => {
+      button.addEventListener('click', () => {
+        moveButton(button);
+      });
+    });
+
+    function moveButton(button) {
+      button.classList.add('movable');
+      const viewportWidth = window.innerWidth - button.offsetWidth;
+      const viewportHeight = window.innerHeight - button.offsetHeight;
+      const randomX = Math.floor(Math.random() * viewportWidth);
+      const randomY = Math.floor(Math.random() * viewportHeight);
+      button.style.position = 'absolute'; // Ensure button is absolutely positioned
+      button.style.left = `${randomX}px`;
+      button.style.top = `${randomY}px`;
+    }
+
+  </script>
+</body>
+
+</html>
